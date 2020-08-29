@@ -1,0 +1,56 @@
+node 'vm01.linuxmastery.kr' {
+  user { 'gloomy':
+    ensure => absent,
+  }
+
+
+  user { 'cynical':
+    ensure => present,
+    password => '$1$V9kBBraa$X2i/3AqLh4Qn2ETzl5pSP0',
+    managehome => true,
+    shell => '/bin/bash',
+  }
+
+
+  package { 'apache2':
+    ensure => installed,
+  }
+
+  service { 'apache2':
+    ensure => running,
+  }
+
+  file { 'index.html':
+    path => '/var/www/html/index.html',
+    content => "안녕하세요!\n",
+    require => Package['apache2'],
+  }
+
+  file { 'charset.conf':
+    path => '/etc/apache2/conf-available/charset.conf',
+    content => "AddDefaultCharset UTF-8\n",
+    require => Package['apache2'],
+    #notify => Service['apache2'],
+  }
+
+  notify { 'test_message':
+    message => "===== vm01 =====\n",
+  }
+
+  Package['apache2'] -> File['charset.conf'] ~> Service['apache2']
+}
+
+node 'vm02.linuxmastery.kr' {
+  file { '/etc/motd':
+    owner => 'root',
+    content => "\n
+      Hostname : ${::fqdn}
+      IP Address : ${::ipaddress}\n\n",
+  }
+}
+
+node default {
+  notify { 'default_message':
+    message => "===== default =====\n",
+  }
+}
