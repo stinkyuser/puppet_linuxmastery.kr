@@ -7,6 +7,7 @@ node 'vm02.linuxmastery.kr' {
   include webapp
 }
 node 'vm03.linuxmastery.kr' {
+  include webapp
   notify { '===== vm03 =====\n': }
 }
 node default {
