@@ -1,5 +1,5 @@
 # puppet code for linuxmastery.kr
- 
+ hello
 linuxmastery.kr 운영을 위한 퍼팻 코드 저장소
  
 ## 코드 공헌자
